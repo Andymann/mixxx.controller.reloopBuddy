@@ -352,12 +352,12 @@
             </control>
             <control>
                 <group>[Master]</group>
-                <key>headGain</key>
+                <key>MyController.headGain</key>
                 <description>MIDI Learned from 8 messages.</description>
                 <status>0xBE</status>
                 <midino>0x0C</midino>
                 <options>
-                    <normal/>
+                    <script-binding/>
                 </options>
             </control>
             <control>

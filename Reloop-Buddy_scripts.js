@@ -173,8 +173,12 @@ MyController.starsDown = function(midichan, control, value, status, group){
     engine.setValue(MyController.lastDeckLoaded, "stars_down", 1.0);
 };
 MyController.starsUp = function(midichan, control, value, status, group){
-    /*engine.setValue("[Library]", "track_color_next", 1.0);*/
     engine.setValue(MyController.lastDeckLoaded, "stars_up", 1.0);
+};
+
+// Make PFL Control a little less aggressive
+MyController.headGain = function(midichan, control, value, status, group){
+    engine.setValue("[Master]", "headGain", value/230);
 };
 
 MyController.starsDeck = function(midichan, control, value, status, group){
