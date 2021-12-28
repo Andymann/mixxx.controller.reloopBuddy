@@ -252,6 +252,13 @@ MyController.loadTrack = function(midichan, control, value, status, group){
     
     engine.setValue(group, "LoadSelectedTrack", 1 );
     MyController.lastDeckLoaded = group;
+
+    // PFL fuer das Deck aktivieren
+    midi.sendShortMsg(0x90 + deck-1, 0x1B, 0x7F);    // Headphone-cue left
+    // midi.sendShortMsg(0x91 + deck-1, 0x1B, 0x7F);    // Headphone-cue right
+
+    engine.setParameter("[Channel" + deck.toString() +"]", "pfl", 1);
+
 };
 
 MyController.previewLoadAndPlay = function(midichan, control, value, status, group){
@@ -596,15 +603,6 @@ MyController._hotcue_playstop = function(midichan, value, group, hotcue){
 
 
         }
-        /*
-        midi.sendShortMsg(midiID, 0x14 + 0, RED); //RED
-        midi.sendShortMsg(midiID, 0x14 + 1, GREEN);  //PINK
-        midi.sendShortMsg(midiID, 0x14 + 2, VIOLET);  //PINK
-        midi.sendShortMsg(midiID, 0x14 + 3, ORANGE);  //VIOLETT
-
-        midi.sendShortMsg(midiID, 0x14 + 4, WHITE);  //VIOLETT
-        midi.sendShortMsg(midiID, 0x14 + 5, WHITE);  //VIOLETT
-        */
     }
 
 };
@@ -726,190 +724,3 @@ MyController.scratchWheelB = function (midichan, control, value, status, group) 
     }
 };
 
-
-
-
-
-//MyController.vinylButton = [true]
-
-/*
-MyController.init = function() {
-    
-		
-	// Turn off base LED default behavior
-	midi.sendShortMsg(0x90,0x24,0x00);
-	
-	// Connect the base LEDs
-    engine.connectControl("[Channel1]","VuMeterL","DJCStarlight.baseLEDUpdate");
-    engine.connectControl("[Channel2]","VuMeterR","DJCStarlight.baseLEDUpdate");
-	
-	
-	//Set effects Levels - Dry/Wet
-	engine.setParameter("[EffectRack1_EffectUnit1_Effect1]", "meta", 0.6);
-	engine.setParameter("[EffectRack1_EffectUnit1_Effect2]", "meta", 0.6);
-	engine.setParameter("[EffectRack1_EffectUnit1_Effect3]", "meta", 0.6);
-	engine.setParameter("[EffectRack1_EffectUnit2_Effect1]", "meta", 0.6);
-	engine.setParameter("[EffectRack1_EffectUnit2_Effect2]", "meta", 0.6);
-	engine.setParameter("[EffectRack1_EffectUnit2_Effect3]", "meta", 0.6);
-	engine.setParameter("[EffectRack1_EffectUnit1]", "mix", 1);
-	engine.setParameter("[EffectRack1_EffectUnit2]", "mix", 1);
-	
-};
-*/
-/*
-// The base LED are mapped to the VU Meter for light show.
-MyController.baseLEDUpdate = function (value, group, control){
-    value = (value*127);
-    switch(control) {
-    case "VuMeterL":
-        midi.sendShortMsg(0x91, 0x23, value);
-        break;
-		
-    case "VuMeterR":
-        midi.sendShortMsg(0x92, 0x23, value);
-        break;
-    }
-}
-*/
-
-// The Vinyl button, used to enable or disable scratching on the jog wheels (The Vinyl button enableds both deck).
-/*
-MyController.vinylButton = function(channel, control, value, status, group) {
-    if (value > 0 ) {
-        if (DJCStarlight.scratchEnabled) {
-            DJCStarlight.scratchEnabled = false;
-            midi.sendShortMsg(0x91,0x03,0x00);
-            
-        } else {
-            DJCStarlight.scratchEnabled = true;
-            midi.sendShortMsg(0x91,0x03,0x7F);
-            
-        }
-    }
-};
-*/
-
-
-// The pressure action over the jog wheel
-/*
-MyController.wheelTouchA = function (channel, control, value, status, group) {
-    channel = channel+1;
-    if (value > 0 && (engine.getValue("[Channel1]", "play") != 1 || DJCStarlight.vinylButton)){
-        //  Touching the wheel.
-        var alpha = 1.0/8;
-        var beta = alpha/32;
-        engine.scratchEnable(1, 600, 33+1/3, alpha, beta);
-    } else {
-        // Released the wheel.
-        engine.scratchDisable(1);
-    }
-};
-*/
-
-/*
-MyController.wheelTouchB = function (channel, control, value, status, group) {
-    channel = channel+2;
-    if (value > 0 && (engine.getValue("[Channel2]", "play") != 1 || DJCStarlight.vinylButton)) {
-        // Touching the wheel.
-        var alpha = 1.0/8;
-        var beta = alpha/32;
-        engine.scratchEnable(2, 600, 33+1/3, alpha, beta);
-    } else {
-        // Released the wheel.
-        engine.scratchDisable(2);
-    }
-};
-*/
-
-/*
-// The wheel that actually controls the scratching
-MyController.scratchWheelA = function (channel, control, value, status, group) {
-  
-
-    var newValue;
-    if (value < 64) {
-        newValue = value;
-    } else {
-        newValue = value - 128;
-    }
- 
- 
-    if (engine.isScratching(1)) {
-        engine.scratchTick(1, newValue); // Scratch!
-    } 
-}
-*/
-
-/*
-// The wheel that actually controls the bending
-MyController.bendWheelA = function (channel, control, value, status, group) {
-  
- 
-    var newValue;
-    if (value < 64) {
-        newValue = value;
-    } else {
-        newValue = value - 128;
-    }
- 
- 
-    // In either case, register the movement
-    if (engine.isScratching(1)) {
-        engine.scratchTick(1, newValue); // Scratch!
-    } else {
-        engine.setValue('[Channel'+1+']', 'jog', newValue); // Pitch bend
-    }
-}
-*/
-
-/*
-MyController.scratchWheelB = function (channel, control, value, status, group) {
-  
- 
-    // A: For a control that centers on 0:
-    var newValue;
-    if (value < 64) {
-        newValue = value;
-    } else {
-        newValue = value - 128;
-    }
- 
- 
-    // In either case, register the movement
-    if (engine.isScratching(2)) {
-        engine.scratchTick(2, newValue); // Scratch!
-    } 
-}
-*/
-
-/*
-// The wheel that actually controls the bending
-MyController.bendWheelB = function (channel, control, value, status, group) {
-  
- 
-    // A: For a control that centers on 0:
-    var newValue;
-    if (value < 64) {
-        newValue = value;
-    } else {
-        newValue = value - 128;
-    }
- 
- 
-    // In either case, register the movement
-    // if (engine.isScratching(1)) {
-    //    engine.scratchTick(1, newValue); // Scratch!
-    //} else  {
-        engine.setValue('[Channel'+2+']', 'jog', newValue); // Pitch bend
-    }
-}
-*/
-
-/*
-MyController.shutdown = function() {
-	
-	// Reset base LED 
-	//midi.sendShortMsg(0x90,0x24,0x7F);
-    
-};
-*/
