@@ -267,30 +267,30 @@ MyController.loadTrack = function(midichan, control, value, status, group){
 
 MyController.previewLoadAndPlay = function(midichan, control, value, status, group){
     if(value == 127){
-        var isPlaying = engine.getValue(group,"play",1);
-        /*
-        MyController.previewPlaying = !MyController.previewPlaying;
-        if(MyController.previewPlaying){
-            engine.setValue(group, "LoadSelectedTrackAndPlay", 1);
-            midi.sendShortMsg(0x90, 0x02, 0x7f); 
-            midi.sendShortMsg(0x91, 0x02, 0x7f); 
-        }else{
-            engine.setValue(group, "stop", 1);
-            midi.sendShortMsg(0x80, 0x02, 0x00); 
-            midi.sendShortMsg(0x81, 0x02, 0x00); 
-        }
-        */
-       if(isPlaying==0){
-            engine.setValue(group, "LoadSelectedTrackAndPlay", 1);
-            //midi.sendShortMsg(0x90, 0x02, 0x7f); 
-            //midi.sendShortMsg(0x91, 0x02, 0x7f); 
-        }else{
-            engine.setValue(group, "stop", 1);
-            //midi.sendShortMsg(0x80, 0x02, 0x00); 
-            //midi.sendShortMsg(0x81, 0x02, 0x00); 
-        }
+        // var isPlaying = engine.getValue(group,"play",1);
+        //if(isPlaying==0){
+        //    engine.setValue(group, "LoadSelectedTrackAndPlay", 1);
+        //}else{
+        //    engine.setValue(group, "stop", 1); 
+        //}
+        engine.setValue(group, "LoadSelectedTrackAndPlay", 1);
+    }else{
+        engine.setValue(group, "stop", 1); 
     }
 
+};
+
+MyController.moveVertical = function(midichan, control, value, status, group){
+    var iStepSize = 1;
+    if(control == 0x78){ // Shift+Twist
+        iStepSize = 15;
+    }
+    if(value == 1){ // Clockwise
+        
+    }else{
+        iStepSize = iStepSize * (-1);
+    }
+    engine.setValue("[Library]", "MoveVertical", iStepSize);
 };
 
 MyController.toggleMode = function(midichan, control, value, status, group){
