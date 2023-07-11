@@ -178,7 +178,7 @@ MyController.starsUp = function(midichan, control, value, status, group){
 
 // Make PFL Control a little less aggressive
 MyController.headGain = function(midichan, control, value, status, group){
-    engine.setValue("[Master]", "headGain", value/230);
+    engine.setValue("[Master]", "headGain", value/666);
 };
 
 MyController.starsDeck = function(midichan, control, value, status, group){
@@ -728,3 +728,10 @@ MyController.scratchWheelB = function (midichan, control, value, status, group) 
     }
 };
 
+MyController.addAutoDJ = function (midichan, control, value, status, group) {
+    if (value > 64) {
+        engine.setValue("[Library]", "AutoDjAddBottom", 1);
+    } else {
+        //NOP
+    }
+};
