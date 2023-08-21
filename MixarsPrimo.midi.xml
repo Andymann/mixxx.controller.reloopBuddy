@@ -893,7 +893,166 @@
                     <script-binding/>
                 </options>
             </control>
-
+			<control>
+                <group>[Channel1]</group>
+                <key>mp.fx</key>
+                <description>FX Select 1</description>
+                <status>0x98</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel1]</group>
+                <key>mp.fx</key>
+                <description>FX Select 2</description>
+                <status>0x98</status>
+                <midino>0x01</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel1]</group>
+                <key>mp.fx</key>
+                <description>FX Select 3</description>
+                <status>0x98</status>
+                <midino>0x02</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel1]</group>
+                <key>mp.fx</key>
+                <description>FX Mode</description>
+                <status>0x98</status>
+                <midino>0x04</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel1]</group>
+                <key>mp.fx</key>
+                <description>FX 1 Knob</description>
+                <status>0xb8</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel1]</group>
+                <key>mp.fx</key>
+                <description>FX 2 Knob</description>
+                <status>0xb8</status>
+                <midino>0x01</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel1]</group>
+                <key>mp.fx</key>
+                <description>FX 2 Knob</description>
+                <status>0xb8</status>
+                <midino>0x02</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel1]</group>
+                <key>mp.fx</key>
+                <description>FX Beats Knob</description>
+                <status>0xb8</status>
+                <midino>0x03</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel2]</group>
+                <key>mp.fx</key>
+                <description>FX Select 1</description>
+                <status>0x99</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel2]</group>
+                <key>mp.fx</key>
+                <description>FX Select 2</description>
+                <status>0x99</status>
+                <midino>0x01</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel2]</group>
+                <key>mp.fx</key>
+                <description>FX Select 3</description>
+                <status>0x99</status>
+                <midino>0x02</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel2]</group>
+                <key>mp.fx</key>
+                <description>FX Mode</description>
+                <status>0x99</status>
+                <midino>0x04</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel2]</group>
+                <key>mp.fx</key>
+                <description>FX 1 Knob</description>
+                <status>0xb9</status>
+                <midino>0x00</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel2]</group>
+                <key>mp.fx</key>
+                <description>FX 2 Knob</description>
+                <status>0xb9</status>
+                <midino>0x01</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel2]</group>
+                <key>mp.fx</key>
+                <description>FX 2 Knob</description>
+                <status>0xb9</status>
+                <midino>0x02</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel2]</group>
+                <key>mp.fx</key>
+                <description>FX Beats Knob</description>
+                <status>0xb9</status>
+                <midino>0x03</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
         
         </controls>
         <outputs/>

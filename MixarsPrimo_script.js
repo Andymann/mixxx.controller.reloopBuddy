@@ -202,6 +202,12 @@ engine.connectControl("[Channel2]", "VuMeter", function(value, group) { mp.setMa
 engine.connectControl("[Channel1]", "VuMeter", function(value, group) { mp.setChannelVU(0xbf, 0x19, value, group); });
 engine.connectControl("[Channel2]", "VuMeter", function(value, group) { mp.setChannelVU(0xbf, 0x1d, value, group); });
 
+engine.connectControl("[EffectRack1_EffectUnit1_Effect1]", "enabled", function(value, group) { mp.setLED(0x98, 0x00, value); });
+engine.connectControl("[EffectRack1_EffectUnit1_Effect2]", "enabled", function(value, group) { mp.setLED(0x98, 0x01, value); });
+engine.connectControl("[EffectRack1_EffectUnit1_Effect3]", "enabled", function(value, group) { mp.setLED(0x98, 0x02, value); });
+engine.connectControl("[EffectRack1_EffectUnit2_Effect1]", "enabled", function(value, group) { mp.setLED(0x99, 0x00, value); });
+engine.connectControl("[EffectRack1_EffectUnit2_Effect2]", "enabled", function(value, group) { mp.setLED(0x99, 0x01, value); });
+engine.connectControl("[EffectRack1_EffectUnit2_Effect3]", "enabled", function(value, group) { mp.setLED(0x99, 0x02, value); });
 
 //----The SYNC-Button is connected to Preview. The CUE button is just too close to the PLAY button
 //engine.connectControl("[PreviewDeck1]","play", function(value, offset, group) { mp.setLED(value, 0x02, "[Channel1]"); });
@@ -1173,8 +1179,6 @@ mp.setMasterVU = function(pStatus, pNumber, pValue){
 };
 
 mp.pitchCoarse = function (midichan, control, value, status, group) {
-	//var deck = script.deckFromGroup(group);
-	//engine.setParameter("[Channel" + deck.toString() +"]", "pfl", !isEnabled);
 	engine.setValue(group, "rate", (-1.0)*(value/63 -1.0));
 };
 
@@ -1187,15 +1191,37 @@ mp.pitch = function (midichan, control, value, status, group) {
 		mp.pitchLsbValue[deck] = value;
 	}
 	
-
 	var tmp = (mp.pitchLsbValue[deck] << 3) | (mp.pitchMsbValue[deck] >> 4);
 	engine.setValue(group, "rate", ((-1)*tmp/512)+1);
-    //tmp = lMSB*127 + value;
-    //engine.setValue(group, "rate", (lMSB*127 + value)/1016);
-	//engine.setValue(group, "rate", (tmp));
-	//tmp = script.midiPitch(value,lMSB, status);
-    //tmp = lMSB*127 + value;
-	//var tmp = (mp.pitchLsbValue[deck] << 3) | (mp.pitchMsbValue[deck] >> 4)
+
+};
+
+mp.fx = function (midichan, control, value, status, group) {
+	var deck = script.deckFromGroup(group);
 	
-    //engine.setValue(group, "rate", (-1.0)*(mp.pitchLsbValue[deck]/63 -1.0));
+	if(value>0){
+		
+		if((status==0x98)||(status==0x99)){	// Buttons
+			var enabled;
+			if(control==0x00){
+				enabled = engine.getParameter("[EffectRack1_EffectUnit" + deck + "_Effect1]", "enabled");
+				engine.setParameter("[EffectRack1_EffectUnit" + deck + "_Effect1]", "enabled", !enabled);
+			}else if(control==0x01){
+				enabled = engine.getParameter("[EffectRack1_EffectUnit" + deck + "_Effect2]", "enabled");
+				engine.setParameter("[EffectRack1_EffectUnit" + deck + "_Effect2]", "enabled", !enabled);
+			}else if(control==0x02){
+				enabled = engine.getParameter("[EffectRack1_EffectUnit" + deck + "_Effect3]", "enabled");
+				engine.setParameter("[EffectRack1_EffectUnit" + deck + "_Effect3]", "enabled", !enabled);
+			}
+		}else if((status==0xb8)||(status==0xb9)){ // Pots
+			if(control==0x00){
+				engine.setParameter("[EffectRack1_EffectUnit" + deck + "_Effect1]", "meta", value/0x7f);
+			}else if(control==0x01){
+				engine.setParameter("[EffectRack1_EffectUnit" + deck + "_Effect2]", "meta", value/0x7f);
+			}else if(control==0x02){
+				engine.setParameter("[EffectRack1_EffectUnit" + deck + "_Effect3]", "meta", value/0x7f);
+			}
+		}
+	}
+
 };
