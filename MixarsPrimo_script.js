@@ -184,8 +184,8 @@ engine.connectControl("[Channel2]","hotcue_6_enabled", function(value) { mp.hcue
 engine.connectControl("[Channel2]","hotcue_7_enabled", function(value) { mp.hcue_deck(1, value, 0x1A); });
 engine.connectControl("[Channel2]","hotcue_8_enabled", function(value) { mp.hcue_deck(1, value, 0x1B); });
 
-engine.connectControl("[Channel1]","play_latched", function(value, offset, group) { mp.setLED(value, 0x00, "[Channel1]"); });
-engine.connectControl("[Channel2]","play_latched", function(value, offset, group) { mp.setLED(value, 0x00, "[Channel2]"); });
+engine.connectControl("[Channel1]","play_latched", function(value, offset, group) { mp.setLED(0x90, 0x00, value); });
+engine.connectControl("[Channel2]","play_latched", function(value, offset, group) { mp.setLED(0x91, 0x00, value); });
 
 engine.connectControl("[Channel1]","end_of_track", function(value, group) { mp.endOfTrack(value, group); });
 engine.connectControl("[Channel2]","end_of_track", function(value, group) { mp.endOfTrack(value, group); });
