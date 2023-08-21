@@ -523,7 +523,9 @@ mp.parameterLeft = function(midichan, control, value, status, group){
     if(value == 0x7f){
         if(engine.getValue(group, "loop_enabled")){
             engine.setValue(group, "loop_move", -1);
-        }
+        }else{
+			engine.setValue(group, "stars_down", 1);
+		}
     }
     midi.sendShortMsg(status, control, value);
 }
@@ -532,7 +534,9 @@ mp.parameterRight  =function(midichan, control, value, status, group){
     if(value == 0x7f){
         if(engine.getValue(group, "loop_enabled")){
             engine.setValue(group, "loop_move", +1);
-        }
+        }else{
+			engine.setValue(group, "stars_up", 1);
+		}
     }
     midi.sendShortMsg(status, control, value);
 }
@@ -1249,6 +1253,8 @@ mp.censor = function (midichan, control, value, status, group) {
 };
 
 mp.touchStrip = function (midichan, control, value, status, group) {
-	engine.setValue(group, "playposition", value/127);
+	if(!bShift){
+		engine.setValue(group, "playposition", value/127);
+	}
 
 };
