@@ -1053,6 +1053,16 @@
                     <script-binding/>
                 </options>
             </control>
+			<control>
+                <group>[Library]</group>
+                <key>mp.scrollWheelClick</key>
+                <description>Shift</description>
+                <status>0x9f</status>
+                <midino>0x07</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
         
         </controls>
         <outputs/>

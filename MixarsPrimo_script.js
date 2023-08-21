@@ -1114,11 +1114,17 @@ mp.loadTrack = function (midichan, control, value, status, group) {
 };
 
 mp.scrollWheelClick = function (midichan, control, value, status, group) {
-	if(value > 0){
-		bScrollWheelClick = true;
-		engine.setValue("[Library]", "MoveFocusBackward", 1);
-	}else{
-		bScrollWheelClick = false;
+	if(control == 0x06){
+		if(value > 0){
+			bScrollWheelClick = true;
+			engine.setValue("[Library]", "MoveFocusBackward", 1);
+		}else{
+			bScrollWheelClick = false;
+		}
+	}else if(control == 0x07){ // Click+Shift
+		if(value > 0){
+			engine.setValue("[Library]", "GoToItem", 1);
+		}
 	}
 };
 
