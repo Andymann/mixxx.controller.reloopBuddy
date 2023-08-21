@@ -40,6 +40,9 @@ var lMSB = 0;
 var lLSB = 0;
 var mode;
 
+var bShift = false;
+var bScrollWheelClick = false;
+
 
 mp.previewPlaying = false;
 mp.pitchMsbValue = [0x40, 0x40];
@@ -187,9 +190,15 @@ engine.connectControl("[Channel2]","end_of_track", function(value, group) { mp.e
 engine.connectControl("[Channel1]", "playposition", function(value, group) { mp.trackPositionLEDs(value, group); });
 engine.connectControl("[Channel2]", "playposition", function(value, group) { mp.trackPositionLEDs(value, group); });
 
+engine.connectControl("[Channel1]", "pfl", function(value, group) { mp.setLED(0x90, 0x1b, value); });
+engine.connectControl("[Channel2]", "pfl", function(value, group) { mp.setLED(0x91, 0x1b, value); });
 
-//engine.connectControl("[Channel1]","pfl", function(value, offset, group) { mp.setLED(value, 0x1B, "[Channel1]"); });
-//engine.connectControl("[Channel2]","pfl", function(value, offset, group) { mp.setLED(value, 0x1B, "[Channel2]"); });
+engine.connectControl("[Channel1]", "VuMeter", function(value, group) { mp.setMasterVU(0xb0, 0x1f, value); });
+engine.connectControl("[Channel2]", "VuMeter", function(value, group) { mp.setMasterVU(0xb1, 0x1f, value); });
+
+engine.connectControl("[Channel1]", "VuMeter", function(value, group) { mp.setChannelVU(0xbf, 0x19, value, group); });
+engine.connectControl("[Channel2]", "VuMeter", function(value, group) { mp.setChannelVU(0xbf, 0x1d, value, group); });
+
 
 //----The SYNC-Button is connected to Preview. The CUE button is just too close to the PLAY button
 //engine.connectControl("[PreviewDeck1]","play", function(value, offset, group) { mp.setLED(value, 0x02, "[Channel1]"); });
@@ -403,6 +412,11 @@ mp._hotcue_setclear = function(value, group, hotcue){
 
  mp.shiftButton = function(midichan, control, value, status, group){
     midi.sendShortMsg(0x9f, 0x00, value);
+	if (value > 0){
+		bShift = true;
+	}else{
+		bShift = false;
+	}
  }
 
 //
@@ -1059,4 +1073,104 @@ mp.addAutoDJ = function (midichan, control, value, status, group) {
     } else {
         //NOP
     }
+};
+
+mp.libraryScroll = function (midichan, control, value, status, group) {
+
+	var iStepSize = 1;
+	if(control == 0x01){
+		iStepSize = 10;
+	}
+	if(value==0x3f){
+		engine.setValue("[Library]", "MoveVertical", iStepSize);
+	}else if(value==0x41){
+		engine.setValue("[Library]", "MoveVertical", iStepSize * (-1));
+	}
+};
+
+
+mp.loadTrack = function (midichan, control, value, status, group) {
+	var deck = script.deckFromGroup(group);
+
+	if(value > 0){
+		engine.setValue(group, "LoadSelectedTrack", 1 );
+	}
+
+	midi.sendShortMsg(0x9f, deck+1, value);
+};
+
+mp.scrollWheelClick = function (midichan, control, value, status, group) {
+	if(value > 0){
+		bScrollWheelClick = true;
+		engine.setValue("[Library]", "MoveFocusBackward", 1);
+	}else{
+		bScrollWheelClick = false;
+	}
+};
+
+mp.keyLock = function (midichan, control, value, status, group) {
+	var deck = script.deckFromGroup(group);
+	deck -= 1;
+	if(value > 0){
+		//script.toggleControl(group, "keylock_toggle", 100);
+		var keyLock = engine.getValue(group, "keylock");
+		engine.setValue(group, "keylock", !keyLock);
+		midi.sendShortMsg(0x90 + deck, 0x0d, value && !keyLock);
+	}else{
+		//engine.setValue(group, "keylock", 1);
+	}
+	
+};
+
+mp.headphoneCue = function (midichan, control, value, status, group) {
+	var deck = script.deckFromGroup(group);
+	//deck -= 1;
+	var isEnabled = engine.getParameter("[Channel" + deck.toString() +"]", "pfl");
+	if(value > 0){
+		engine.setParameter("[Channel" + deck.toString() +"]", "pfl", !isEnabled);
+	}else{
+		
+	}
+};
+
+mp.pitchCoarse = function (midichan, control, value, status, group) {
+	//var deck = script.deckFromGroup(group);
+	//engine.setParameter("[Channel" + deck.toString() +"]", "pfl", !isEnabled);
+	engine.setValue(group, "rate", (-1.0)*(value/63 -1.0));
+};
+
+mp.eq = function (midichan, control, value, status, group) {
+	if(control==0x19){
+		//Low
+		engine.setValue("[EqualizerRack1_" + group + "_Effect1]","parameter1" , value*(4/127.0)-value*(2.0/127));
+	}else if(control==0x18){
+		//Mid
+		engine.setValue("[EqualizerRack1_" + group + "_Effect1]","parameter2" , value*(4/127.0)-value*(2.0/127));
+	}else if(control==0x17){
+		//High
+		engine.setValue("[EqualizerRack1_" + group + "_Effect1]","parameter3" , value*(4/127.0)-value*(2.0/127));
+
+	}
+};
+
+mp.gain = function (midichan, control, value, status, group) {
+	engine.setValue(group,"pregain" , value*(4/127.0)-value*(2.0/127));
+};
+
+mp.setLED = function(pStatus, pNumber, pValue){
+	var val = (pValue>0) ? 0x7f : 0x00;
+	midi.sendShortMsg(pStatus, pNumber, val);    //Pads left
+};
+
+mp.setChannelVU = function(pStatus, pNumber, pValue, group){
+	var val = pValue*10.0;
+	var multi = engine.getParameter(group,"volume")
+	midi.sendShortMsg(pStatus, pNumber, val*multi);    //Pads left
+};
+
+mp.setMasterVU = function(pStatus, pNumber, pValue){
+	var val = pValue*10.0;
+	var multi = engine.getParameter("[Master]","crossfader");
+	//multi += -1;
+	midi.sendShortMsg(pStatus, pNumber, val*multi);    //Pads left
 };
