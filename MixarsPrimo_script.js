@@ -1247,3 +1247,8 @@ mp.censor = function (midichan, control, value, status, group) {
 	engine.setValue(group, "reverseroll", val);
 
 };
+
+mp.touchStrip = function (midichan, control, value, status, group) {
+	engine.setValue(group, "playposition", value/127);
+
+};

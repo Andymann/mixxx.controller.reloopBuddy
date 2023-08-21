@@ -1096,9 +1096,29 @@
 			<control>
                 <group>[Channel2]</group>
                 <key>mp.censor</key>
-                <description>Shift</description>
+                <description></description>
                 <status>0x91</status>
                 <midino>0x10</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel1]</group>
+                <key>mp.touchStrip</key>
+                <description></description>
+                <status>0xb0</status>
+                <midino>0x2b</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel2]</group>
+                <key>mp.touchStrip</key>
+                <description></description>
+                <status>0xb1</status>
+                <midino>0x2b</midino>
                 <options>
                     <script-binding/>
                 </options>
