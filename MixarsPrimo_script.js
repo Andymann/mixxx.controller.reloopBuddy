@@ -86,6 +86,11 @@ mp.init = function() {
     midi.sendShortMsg(0xb1, 0x0e, 0x05);
     midi.sendShortMsg(0xb1, 0x0a, 0x7f);    // right platter ring
 
+	//----QuickFX initially OFF; setValue also works
+    engine.setParameter("[QuickEffectRack1_[Channel1]_Effect1]", "enabled", 0);
+    engine.setParameter("[QuickEffectRack1_[Channel2]_Effect1]", "enabled", 0);
+
+
     engine.beginTimer(500, function() {
         mp.padsOff_Deck(0);
         mp.padsOff_Deck(1);
