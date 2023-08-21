@@ -53,6 +53,9 @@ mp.mode = [MODE_NORMAL, MODE_NORMAL];
 mp.isVinylMode = [true, true];
 mp.prevJogLED = [0, 0];
 
+mp.pitchMsbValue = [0x00, 0x00];
+mp.pitchLsbValue = [0x00, 0x00];
+
 // Scratch algorithm parameters
 mp.scratchParams = {
     recordSpeed: 33 + 1/3,
@@ -1133,12 +1136,6 @@ mp.headphoneCue = function (midichan, control, value, status, group) {
 	}
 };
 
-mp.pitchCoarse = function (midichan, control, value, status, group) {
-	//var deck = script.deckFromGroup(group);
-	//engine.setParameter("[Channel" + deck.toString() +"]", "pfl", !isEnabled);
-	engine.setValue(group, "rate", (-1.0)*(value/63 -1.0));
-};
-
 mp.eq = function (midichan, control, value, status, group) {
 	if(control==0x19){
 		//Low
@@ -1173,4 +1170,32 @@ mp.setMasterVU = function(pStatus, pNumber, pValue){
 	var multi = engine.getParameter("[Master]","crossfader");
 	//multi += -1;
 	midi.sendShortMsg(pStatus, pNumber, val*multi);    //Pads left
+};
+
+mp.pitchCoarse = function (midichan, control, value, status, group) {
+	//var deck = script.deckFromGroup(group);
+	//engine.setParameter("[Channel" + deck.toString() +"]", "pfl", !isEnabled);
+	engine.setValue(group, "rate", (-1.0)*(value/63 -1.0));
+};
+
+mp.pitch = function (midichan, control, value, status, group) {
+	var deck = script.deckFromGroup(group);
+	deck -= 1;
+	if(control==0x08){	//coarse
+		mp.pitchMsbValue[deck] = value;
+	}else if(control==0x09){	//fine
+		mp.pitchLsbValue[deck] = value;
+	}
+	
+
+	var tmp = (mp.pitchLsbValue[deck] << 3) | (mp.pitchMsbValue[deck] >> 4);
+	engine.setValue(group, "rate", ((-1)*tmp/512)+1);
+    //tmp = lMSB*127 + value;
+    //engine.setValue(group, "rate", (lMSB*127 + value)/1016);
+	//engine.setValue(group, "rate", (tmp));
+	//tmp = script.midiPitch(value,lMSB, status);
+    //tmp = lMSB*127 + value;
+	//var tmp = (mp.pitchLsbValue[deck] << 3) | (mp.pitchMsbValue[deck] >> 4)
+	
+    //engine.setValue(group, "rate", (-1.0)*(mp.pitchLsbValue[deck]/63 -1.0));
 };
