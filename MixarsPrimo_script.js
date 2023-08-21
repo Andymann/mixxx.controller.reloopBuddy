@@ -1234,5 +1234,16 @@ mp.fx = function (midichan, control, value, status, group) {
 			}
 		}
 	}
+};
+
+mp.cueButton = function (midichan, control, value, status, group) {
+	var deck = script.deckFromGroup(group);
+	
+
+};
+
+mp.censor = function (midichan, control, value, status, group) {
+	var val = (value > 0)? 1:0;
+	engine.setValue(group, "reverseroll", val);
 
 };

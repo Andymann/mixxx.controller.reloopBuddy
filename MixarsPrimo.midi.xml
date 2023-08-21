@@ -1063,6 +1063,46 @@
                     <script-binding/>
                 </options>
             </control>
+			<control>
+                <group>[Channel1]</group>
+                <key>mp.cueButton</key>
+                <description>Shift</description>
+                <status>0x90</status>
+                <midino>0x01</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel2]</group>
+                <key>mp.cueButton</key>
+                <description>Shift</description>
+                <status>0x91</status>
+                <midino>0x01</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel1]</group>
+                <key>mp.censor</key>
+                <description>Shift</description>
+                <status>0x90</status>
+                <midino>0x10</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
+			<control>
+                <group>[Channel2]</group>
+                <key>mp.censor</key>
+                <description>Shift</description>
+                <status>0x91</status>
+                <midino>0x10</midino>
+                <options>
+                    <script-binding/>
+                </options>
+            </control>
         
         </controls>
         <outputs/>
