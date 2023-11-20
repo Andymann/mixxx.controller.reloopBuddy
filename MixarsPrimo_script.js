@@ -135,9 +135,11 @@ mp.padsOff_Deck = function(deck){
         for (var i = 0; i < 8; i++) { 
             midi.sendShortMsg(0x94, 0x14 + i, 0x00);    //Pads left
         }
+        midi.sendShortMsg(0x94, 0x32, 0x00); // Turn Loop-Button off
     }else if(deck == 1){
         for (var i = 0; i < 8; i++) { 
             midi.sendShortMsg(0x95, 0x14 + i, 0x00);    //Pads left
+            midi.sendShortMsg(0x94, 0x34, 0x00);
         }
     }
 };
